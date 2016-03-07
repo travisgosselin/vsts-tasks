@@ -1,0 +1,36 @@
+{
+	"id": "95192917-6c2b-424c-ad4f-293b9e6e7f67",
+	"name": "UrlStatus",
+	"friendlyName": "Url Status",
+	"description": "Checks the status of a URL looking for 200 status code, with possible content on the page. Good for testing any health check or 'up' entry points.",
+	"category": "Test",
+	"visibility": [ "Build" ],
+	"author": "Travis Gosselin",
+	"version": { "Major": 1, "Minor": 0, "Patch": 0 },
+	"inputs": [
+		{
+			"name": "Url",
+			"type": "string",
+			"label": "Url",
+			"defaultValue": "",
+			"required": true,
+			"helpMarkDown": "The URL that should be requested via a GET verb. i.e. http://www.google.ca"
+		},
+		{
+			"name": "RequiredContent",
+			"type": "string",
+			"label": "Required Content",
+			"defaultValue": "",
+			"required": false,
+			"helpMarkDown": "Will check the returned response for the specified content. Leave blank if you just want to check the status code. i.e. You might check for 'happy' is contained in the content."
+		}
+	],
+    "instanceNameFormat": "Url Status: $(Url)",
+	"execution": {
+		"PowerShell": {
+			"target": "$(currentDirectory)\\UrlStatus.ps1",
+			"argumentFormat": "",
+			"workingDirectory": "$currentDirectory"
+		}
+	}
+}

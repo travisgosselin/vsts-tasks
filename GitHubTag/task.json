@@ -1,0 +1,70 @@
+{
+	"id": "fa562823-36f1-412d-9393-8d953f9cb289",
+	"name": "GitTag",
+	"friendlyName": "GitHub Tag",
+	"description": "Add a tag to GitHub on a supplied repository using the GitHub API.",
+	"category": "Build",
+	"visibility": [ "Build" ],
+	"author": "Travis Gosselin",
+	"version": { "Major": 1, "Minor": 0, "Patch": 0 },
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced",
+            "isExpanded": true
+        }
+    ],
+	"inputs": [
+		{
+			"name": "Tag",
+			"type": "string",
+			"label": "Tag",
+			"defaultValue": "$(Build.BuildNumber)",
+			"required": true,
+			"helpMarkDown": "Tag to add to the related repository and branch. Defaults to $(Build.BuildNumber)."
+		},
+		{
+			"name": "Repo",
+			"type": "string",
+			"label": "Repository Name",
+			"defaultValue": "",
+			"required": true,
+			"helpMarkDown": "The name of the repository to add thte tag to."
+		},
+		{
+			"name": "Commit",
+			"type": "string",
+			"label": "Commit",
+			"defaultValue": "$(Build.SourceVersion)",
+			"required": true,
+			"helpMarkDown": "The SHA commit id to which the tag should be applied. By default is $(Build.SourceVersion), which is the building commit id.",
+            "groupName": "advanced"
+		},
+		{
+			"name": "Owner",
+			"type": "string",
+			"label": "Owner",
+			"defaultValue": "",
+			"required": false,
+			"helpMarkDown": "The owner of the repository to form the URL.",
+            "groupName": "advanced"
+		},
+		{
+			"name": "AuthToken",
+			"type": "string",
+			"label": "OAuth Token",
+			"defaultValue": "",
+			"required": false,
+			"helpMarkDown": "The OAuth token for a user with write permission to this repository to create the tag.",
+            "groupName": "advanced"
+		}
+	],
+    "instanceNameFormat": "Git Tag $(Tag) on Repo $(Repo)",
+	"execution": {
+		"PowerShell": {
+			"target": "$(currentDirectory)\\tag.ps1",
+			"argumentFormat": "",
+			"workingDirectory": "$currentDirectory"
+		}
+	}
+}
