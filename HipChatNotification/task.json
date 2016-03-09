@@ -1,0 +1,117 @@
+{
+	"id": "d2f006f3-de2e-4dac-b871-2d6484efa5a9",
+	"name": "HipChatNotification",
+	"friendlyName": "Hip Chat Notification",
+	"description": "Posts a message to Hip Chat API v2.",
+	"category": "Utility",
+	"visibility": [ "Build" ],
+	"author": "Travis Gosselin",
+	"version": { "Major": 1, "Minor": 0, "Patch": 0 },
+    "groups": [
+    	{
+    		"name": "room",
+      		"displayName": "Room",
+      		"isExpanded": true
+    	},
+        {
+    		"name": "message",
+      		"displayName": "Message",
+      		"isExpanded": true
+    	},
+        {
+    		"name": "build",
+      		"displayName": "Build",
+      		"isExpanded": true
+    	}
+  	],
+	"inputs": [
+		{
+			"name": "RoomId",
+			"type": "string",
+			"label": "Room ID or Name",
+			"defaultValue": "",
+			"required": true,
+            "groupName": "room",
+			"helpMarkDown": "A custom room ID or room name to post messages too."
+		},
+        {
+			"name": "AuthToken",
+			"type": "string",
+			"label": "Auth Token",
+			"defaultValue": "",
+			"required": true,
+            "groupName": "room",
+			"helpMarkDown": "If do not wish to use the preselected integrations you can provide your own Authorization token. This must be provided if using a custom room id."
+		},
+        {
+			"name": "Title",
+			"type": "string",
+			"label": "Title",
+			"defaultValue": "$(Build.DefinitionName) - $(Build.BuildNumber)",
+			"required": true,
+            "groupName": "message",
+			"helpMarkDown": "The title of the message in hipchat."
+		},
+        {
+			"name": "Url",
+			"type": "string",
+			"label": "Url",
+			"defaultValue": "$(System.TeamFoundationCollectionUri)/$(System.TeamProject)/_build?_a=summary&buildId=$(Build.BuildID)&tab=artifacts",
+			"required": false,
+            "groupName": "message",
+			"helpMarkDown": "A possible URL to add as a link when you click on the title. Not required!"
+		},
+        {
+			"name": "Message",
+			"type": "string",
+			"label": "Content",
+			"defaultValue": "<i>Status: <i>$(Agent.JobStatus)<br /><i>Requested By: <i>$(Build.RequestedFor)",
+			"required": false,
+            "groupName": "message",
+			"helpMarkDown": "HTML formatted content message to add to the note. Use only simply HTML like b,i,u, etc"
+		},
+        {
+			"name": "Color",
+			"type": "pickList",
+			"label": "Color",
+			"defaultValue": "gray",
+			"required": true,
+            "groupName": "message",
+            "options": {
+                "yellow": "yellow",
+                "green": "green",
+                "red": "red",
+                "purple": "purple",
+                "gray": "gray",
+                "random": "random"
+            },
+			"helpMarkDown": "The color of the posted message to hipchat. This is disregarded if job status is specified."
+		},
+        {
+			"name": "JobStatus",
+			"type": "string",
+			"label": "Build Job Status",
+			"defaultValue": "$(Agent.JobStatus)",
+			"required": false,
+            "groupName": "build",
+			"helpMarkDown": "Indicates if the build was 'success' or 'failed' and automatically updates the color and only posts based on the always post value. Default is: $(Agent.JobStatus)"
+		},
+        {
+			"name": "AlwaysPost",
+			"type": "boolean",
+			"label": "Always Post",
+			"defaultValue": "false",
+			"required": false,
+            "groupName": "build",
+			"helpMarkDown": "Specify this to indicate if the message should be sent regardless of the JobStatus. If no job status, then does nothing."
+		} 
+	],
+    "instanceNameFormat": "HipChat Message: $(RoomId) - $(Title)",
+	"execution": {
+		"PowerShell": {
+			"target": "$(currentDirectory)\\SendNotification.ps1",
+			"argumentFormat": "",
+			"workingDirectory": "$currentDirectory"
+		}
+	}
+}
